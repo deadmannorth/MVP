@@ -1,7 +1,7 @@
 package ru.aslazarev.mvp
 
-class MainPresenter () {
-    val model = CountersModel()
+import moxy.MvpPresenter
 
-    fun counterClick(id: Int) = model.next(id)
+class MainPresenter () : MvpPresenter<MainView> (){
+
 }
