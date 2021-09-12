@@ -3,14 +3,14 @@ package ru.aslazarev.mvp.model
 class GitHubUsersRepo {
     private val repositories = listOf(
 
-        GithubUser("login1"),
-        GithubUser("login2"),
-        GithubUser("login3"),
-        GithubUser("login4"),
-        GithubUser("login5")
+        GitHubUser("login1"),
+        GitHubUser("login2"),
+        GitHubUser("login3"),
+        GitHubUser("login4"),
+        GitHubUser("login5")
     )
 
-    fun getUsers(): List<GithubUser> {
+    fun getUsers(): List<GitHubUser> {
         return repositories
     }
 }

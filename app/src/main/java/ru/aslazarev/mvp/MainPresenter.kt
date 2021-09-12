@@ -1,38 +1,17 @@
 package ru.aslazarev.mvp
 
 import moxy.MvpPresenter
-import ru.aslazarev.mvp.model.GitHubUsersRepo
-import ru.aslazarev.mvp.model.GithubUser
-import ru.aslazarev.mvp.presentation.IUserListPresenter
-import ru.aslazarev.mvp.view.UserItemView
+import ru.aslazarev.mvp.screens.AndroidScreens
+import ru.terrakok.cicerone.Router
 
-class MainPresenter (val usersRepo: GitHubUsersRepo) : MvpPresenter<MainView> (){
-
-    class UserListPresenter: IUserListPresenter {
-        val users = mutableListOf<GithubUser>()
-        override var itemClickListener: ((UserItemView) -> Unit)? = null
-        override fun getCount() = users.size
-        override fun bindView(view: UserItemView) {
-            val user = users[view.pos]
-            view.setLogin(user.login)
-        }
-    }
-
-    val userListPresenter = UserListPresenter()
-
+class MainPresenter (val router: Router) : MvpPresenter<MainView>()
+{
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        viewState.init()
-        loadData()
-
-        userListPresenter.itemClickListener = {
-            //TODO: переход на экран пользователя
-        }
+        router.replaceScreen(AndroidScreens.UsersScreen())
     }
 
-    private fun loadData() {
-        val users = usersRepo.getUsers()
-        userListPresenter.users.addAll(users)
-        viewState.updateList()
+    fun backPressed() {
+        router.exit()
     }
 }

@@ -1,19 +1,17 @@
 package ru.aslazarev.mvp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
 import ru.aslazarev.mvp.databinding.ActivityMainBinding
-import ru.aslazarev.mvp.model.GitHubUsersRepo
-import ru.aslazarev.mvp.view.ui.UsersRVAdapter
+import ru.aslazarev.mvp.view.BackButtonListener
+import ru.terrakok.cicerone.android.pure.AppNavigator
+import ru.terrakok.cicerone.android.support.SupportAppNavigator
 
 class MainActivity : MvpAppCompatActivity(), MainView {
     private lateinit var binding: ActivityMainBinding
-    private val presenter by moxyPresenter { MainPresenter(GitHubUsersRepo()) }
-    private lateinit var adapter: UsersRVAdapter
+    private val presenter by moxyPresenter { MainPresenter(App.instance.router) }
+    private val navigator = SupportAppNavigator(this, R.id.container)
 
 
 
@@ -25,13 +23,24 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     }
 
-    override fun init() {
-        binding.rvUsers.layoutManager = LinearLayoutManager(this)
-        adapter = UsersRVAdapter(presenter.userListPresenter)
-        binding.rvUsers.adapter = adapter
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        App.instance.navigatorHolder.setNavigator(navigator)
     }
 
-    override fun updateList() {
-        adapter.notifyDataSetChanged()
+    override fun onPause() {
+        super.onPause()
+        App.instance.navigatorHolder.removeNavigator()
     }
+
+    override fun onBackPressed() {
+        supportFragmentManager.fragments.forEach {
+        if(it is BackButtonListener && it.backPressed()){
+            return
+        }
+    }
+    presenter.backPressed()
+    }
+
+
 }
