@@ -1,5 +1,8 @@
 package ru.aslazarev.mvp.presentation
 
+import android.util.Log
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.disposables.Disposable
 import moxy.MvpPresenter
 import ru.aslazarev.mvp.model.GitHubUsersRepo
 import ru.aslazarev.mvp.model.GitHubUser
@@ -11,6 +14,7 @@ import ru.terrakok.cicerone.Router
 class UsersPresenter(val usersRepo: GitHubUsersRepo, val router: Router) : MvpPresenter<UsersView>() {
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GitHubUser>()
+
         override var itemClickListener: ((UserItemView) -> Unit)? = null
 
         override fun getCount() = users.size
@@ -19,6 +23,7 @@ class UsersPresenter(val usersRepo: GitHubUsersRepo, val router: Router) : MvpPr
             val user = users[view.pos]
             view.setLogin(user.login)
         }
+
     }
 
     val usersListPresenter = UsersListPresenter()
@@ -36,14 +41,35 @@ class UsersPresenter(val usersRepo: GitHubUsersRepo, val router: Router) : MvpPr
     }
 
     fun loadData() {
-        val users = usersRepo.getUsers()
-        usersListPresenter.users.addAll(users)
-        viewState.updateList()
+        usersExecutor()
     }
 
     fun backPressed(): Boolean {
         router.exit()
         return true
+    }
+
+    private fun usersExecutor () {
+
+        val gitHubUserObserver = object : Observer<GitHubUser> {
+            var disposable: Disposable? = null
+            override fun onSubscribe(d: Disposable) {
+                disposable = d
+            }
+
+            override fun onNext(t: GitHubUser) {
+                usersListPresenter.users.add(t)
+            }
+
+            override fun onError(e: Throwable) {
+                Log.d("RXJAVA_ERROR_GITHUB_USER", e.printStackTrace().toString())
+            }
+
+            override fun onComplete() {
+                viewState.updateList()
+            }
+        }
+        usersRepo.getUserObserver().subscribe(gitHubUserObserver)
     }
 
 }
