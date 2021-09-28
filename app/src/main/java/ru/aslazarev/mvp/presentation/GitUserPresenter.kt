@@ -8,15 +8,31 @@ import ru.aslazarev.mvp.model.GitHubUser
 import ru.aslazarev.mvp.model.GitHubUsersRepo
 import ru.aslazarev.mvp.navigation.AndroidScreens
 import ru.aslazarev.mvp.view.ui.GitUserView
+import ru.aslazarev.mvp.view.ui.adapter.RepoItemView
 import ru.terrakok.cicerone.Router
 
 class GitUserPresenter (val router: Router) : MvpPresenter<GitUserView>() {
 
+    class RepoListPresenter() : IRepoListPresenter{
+        val repositories = mutableListOf<GitHubUser.GitHubUserRepos>()
+
+        override var itemClickListener: ((RepoItemView) -> Unit)? = null
+
+        override fun bindView(view: RepoItemView) {
+            val repo = repositories[view.pos]
+            view.setRepo(repo.name!!)
+            view.setFork(repo.forks!!)
+        }
+
+        override fun getCount()= repositories.size
+    }
+
+    val repoListPresenter = RepoListPresenter()
+
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
-        viewState.initRepos()
-        viewState.updateList()
+        //viewState.initRepos()
 
     }
 
@@ -30,10 +46,13 @@ class GitUserPresenter (val router: Router) : MvpPresenter<GitUserView>() {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ repos ->
-                user.ReposList = repos as MutableList<GitHubUser.GitHubUserRepos>?
+                repoListPresenter.repositories.addAll(repos)
+                viewState.updateList()
             }, {
                 Log.e("GitUserPresenter", "Ошибка получения репозиториев", it)
             })
     }
+
+
 
 }

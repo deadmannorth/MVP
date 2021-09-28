@@ -1,6 +1,8 @@
 package ru.aslazarev.mvp.presentation
 
 import ru.aslazarev.mvp.view.items.IItemView
+import ru.aslazarev.mvp.view.ui.GitUserView
+import ru.aslazarev.mvp.view.ui.adapter.RepoItemView
 import ru.aslazarev.mvp.view.ui.adapter.UserItemView
 
 interface IListPresenter <V: IItemView> {
@@ -11,5 +13,9 @@ interface IListPresenter <V: IItemView> {
 }
 
 interface IUserListPresenter: IListPresenter<UserItemView> {
+
+}
+
+interface IRepoListPresenter: IListPresenter<RepoItemView> {
 
 }

@@ -37,18 +37,17 @@ class GitUserFragment: MvpAppCompatFragment(), GitUserView, BackButtonListener {
 
 
     override fun init(){
-        gitUser = arguments?.getParcelable<GitHubUser>(KEY_ARG)
+        gitUser = arguments?.getParcelable(KEY_ARG)
         presenter.loadData(gitUser!!)
         binding?.userName?.text = gitUser?.login
         binding?.userAvatar?.let { GlideImageLoader().loadInto(gitUser!!.avatarUrl!!, it) }
+        binding?.userRepos?.layoutManager = LinearLayoutManager(context)
+        adapter = ReposRVAdapter(presenter.repoListPresenter)
+        binding?.userRepos?.adapter = adapter
     }
 
     override fun initRepos() {
-        if (gitUser!!.ReposList != null) {
-            binding?.userRepos?.layoutManager = LinearLayoutManager(context)
-            adapter = ReposRVAdapter(gitUser!!)
-            binding?.userRepos?.adapter = adapter
-        }
+
     }
 
 

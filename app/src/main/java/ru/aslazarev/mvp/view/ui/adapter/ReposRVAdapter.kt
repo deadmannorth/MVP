@@ -1,36 +1,36 @@
 package ru.aslazarev.mvp.view.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.aslazarev.mvp.R
+import ru.aslazarev.mvp.databinding.ItemRepoBinding
 import ru.aslazarev.mvp.model.GitHubUser
+import ru.aslazarev.mvp.presentation.IRepoListPresenter
 
-class ReposRVAdapter(user: GitHubUser): RecyclerView.Adapter<ReposRVAdapter.ViewHolder>() {
+class ReposRVAdapter(val presenter: IRepoListPresenter): RecyclerView.Adapter<ReposRVAdapter.ViewHolder>() {
 
-    val list = user.ReposList
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val v: View = LayoutInflater.from(parent.context).inflate(R.layout.item_repo, parent,false)
-        return ViewHolder(v)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ViewHolder(ItemRepoBinding.inflate(LayoutInflater.from(parent.context), parent, false)).apply {
+            itemView.setOnClickListener { presenter.itemClickListener?.invoke(this) }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        list?.get(position)?.let { holder.bind(it) }
-    }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = presenter.bindView(holder.apply { pos = position })
 
-    override fun getItemCount() = list!!.size
+    override fun getItemCount() = presenter.getCount()
 
-    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bind(repos: GitHubUser.GitHubUserRepos) {
-            itemView.apply {
-                findViewById<TextView>(R.id.repo_name).text = repos.name
-                findViewById<TextView>(R.id.fork_count).text = repos.forks.toString()
-            }
+    inner class ViewHolder(val vb: ItemRepoBinding): RecyclerView.ViewHolder(vb.root),
+    RepoItemView{
+
+        override var pos = -1
+
+        override fun setRepo(name: String) = with(vb){
+            repoName.text = name
         }
 
-
+        override fun setFork(fork: String) = with(vb){
+            forkCount.text = fork
+        }
     }
 }
