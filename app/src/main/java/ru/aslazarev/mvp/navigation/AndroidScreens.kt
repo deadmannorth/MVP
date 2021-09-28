@@ -1,4 +1,4 @@
-package ru.aslazarev.mvp.screens
+package ru.aslazarev.mvp.navigation
 
 import ru.aslazarev.mvp.model.GitHubUser
 import ru.aslazarev.mvp.view.ui.GitUserFragment

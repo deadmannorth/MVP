@@ -1,4 +1,4 @@
-package ru.aslazarev.mvp
+package ru.aslazarev.mvp.view.activity
 
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle

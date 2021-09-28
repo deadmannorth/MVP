@@ -1,7 +1,7 @@
-package ru.aslazarev.mvp
+package ru.aslazarev.mvp.view.activity
 
 import moxy.MvpPresenter
-import ru.aslazarev.mvp.screens.AndroidScreens
+import ru.aslazarev.mvp.navigation.AndroidScreens
 import ru.terrakok.cicerone.Router
 
 class MainPresenter (val router: Router) : MvpPresenter<MainView>()

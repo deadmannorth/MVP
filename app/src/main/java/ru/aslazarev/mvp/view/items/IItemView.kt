@@ -1,4 +1,4 @@
-package ru.aslazarev.mvp.view
+package ru.aslazarev.mvp.view.items
 
 interface IItemView {
 

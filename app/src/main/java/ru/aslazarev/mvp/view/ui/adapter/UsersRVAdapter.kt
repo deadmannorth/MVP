@@ -1,13 +1,14 @@
-package ru.aslazarev.mvp.view.ui
+package ru.aslazarev.mvp.view.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import ru.aslazarev.mvp.databinding.ItemUserBinding
 import ru.aslazarev.mvp.presentation.IUserListPresenter
-import ru.aslazarev.mvp.view.UserItemView
+import ru.aslazarev.mvp.view.images.IImageLoader
 
-class UsersRVAdapter (val presenter: IUserListPresenter)
+class UsersRVAdapter (val presenter: IUserListPresenter, val imageLoader: IImageLoader<ImageView>)
     :RecyclerView.Adapter<UsersRVAdapter.ViewHolder>()
 {
 
@@ -20,11 +21,16 @@ class UsersRVAdapter (val presenter: IUserListPresenter)
 
     override fun getItemCount() = presenter.getCount()
 
-    inner class ViewHolder(val vb: ItemUserBinding) : RecyclerView.ViewHolder(vb.root), UserItemView {
+    inner class ViewHolder(val vb: ItemUserBinding) : RecyclerView.ViewHolder(vb.root),
+        UserItemView {
         override var pos = -1
 
         override fun setLogin(text: String) = with(vb){
             tvLogin.text = text
+        }
+
+        override fun loadAvatar(url: String) = with(vb) {
+            imageLoader.loadInto(url, ivAvatar)
         }
     }
 }
