@@ -30,7 +30,7 @@ class ReposRVAdapter(val presenter: IRepoListPresenter): RecyclerView.Adapter<Re
         }
 
         override fun setFork(fork: String) = with(vb){
-            forkCount.text = fork
+            forkCount.text = "forks: $fork"
         }
     }
 }

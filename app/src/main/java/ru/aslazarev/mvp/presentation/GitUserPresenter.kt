@@ -32,7 +32,6 @@ class GitUserPresenter (val router: Router) : MvpPresenter<GitUserView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
-        //viewState.initRepos()
 
     }
 

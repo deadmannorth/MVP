@@ -46,11 +46,6 @@ class GitUserFragment: MvpAppCompatFragment(), GitUserView, BackButtonListener {
         binding?.userRepos?.adapter = adapter
     }
 
-    override fun initRepos() {
-
-    }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
