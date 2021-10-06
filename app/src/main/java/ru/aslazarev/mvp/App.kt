@@ -1,10 +1,12 @@
 package ru.aslazarev.mvp
 
 import android.app.Application
+import ru.aslazarev.mvp.model.db.Database
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.Router
 
 class App: Application() {
+
     companion object {
         lateinit var instance: App
     }
@@ -19,5 +21,7 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+
+        Database.create(this)
     }
 }

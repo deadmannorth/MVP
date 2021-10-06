@@ -9,14 +9,6 @@ data class GitHubUser(
     @Expose val id: String? = null,
     @Expose val login: String? = null,
     @Expose val avatarUrl: String? = null,
-    @Expose val repos_url: String? = null,
+    @Expose val reposUrl: String? = null,
     var ReposList: MutableList<GitHubUserRepos>? = null
-    ) : Parcelable {
-
-    @Parcelize
-        data class GitHubUserRepos(
-            @Expose val name: String? = null,
-            @Expose val forks: String? = null
-        ): Parcelable
-
-}
+    ) : Parcelable

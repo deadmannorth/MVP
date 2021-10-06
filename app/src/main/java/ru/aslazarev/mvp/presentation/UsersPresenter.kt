@@ -4,7 +4,7 @@ import android.util.Log
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import moxy.MvpPresenter
-import ru.aslazarev.mvp.model.GitHubUsersRepo
+import ru.aslazarev.mvp.model.remote.GitHubUsersRepo
 import ru.aslazarev.mvp.model.GitHubUser
 import ru.aslazarev.mvp.navigation.AndroidScreens
 import ru.aslazarev.mvp.view.ui.adapter.UserItemView
@@ -41,7 +41,7 @@ class UsersPresenter(val usersRepo: GitHubUsersRepo, val router: Router) : MvpPr
     }
 
     fun loadData() {
-        usersRepo.getUsers()
+        usersRepo.getRepository()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ users ->
