@@ -1,13 +1,19 @@
 package ru.aslazarev.mvp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
 import ru.aslazarev.mvp.databinding.ActivityMainBinding
+import ru.aslazarev.mvp.view.BackButtonListener
+import ru.terrakok.cicerone.android.pure.AppNavigator
+import ru.terrakok.cicerone.android.support.SupportAppNavigator
 
-class MainActivity : AppCompatActivity(), MainView {
+class MainActivity : MvpAppCompatActivity(), MainView {
     private lateinit var binding: ActivityMainBinding
-    val viewUpdater = ViewUpdater(this)
+    private val presenter by moxyPresenter { MainPresenter(App.instance.router) }
+    private val navigator = SupportAppNavigator(this, R.id.container)
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -15,22 +21,26 @@ class MainActivity : AppCompatActivity(), MainView {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val listener = View.OnClickListener {
-            viewUpdater.updateView(it.id)
-        }
-
-        binding?.btnCounter1?.setOnClickListener(listener)
-        binding?.btnCounter2?.setOnClickListener(listener)
-        binding?.btnCounter3?.setOnClickListener(listener)
-
     }
 
-    override fun setButtonText(index: Int, text: String) = with(binding) {
-        when(index){
-            0 -> btnCounter1.text = text
-            1 -> btnCounter2.text = text
-            2 -> btnCounter3.text = text
-        }
-
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        App.instance.navigatorHolder.setNavigator(navigator)
     }
+
+    override fun onPause() {
+        super.onPause()
+        App.instance.navigatorHolder.removeNavigator()
+    }
+
+    override fun onBackPressed() {
+        supportFragmentManager.fragments.forEach {
+        if(it is BackButtonListener && it.backPressed()){
+            return
+        }
+    }
+    presenter.backPressed()
+    }
+
+
 }
