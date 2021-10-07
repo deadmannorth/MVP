@@ -1,11 +1,12 @@
-package ru.aslazarev.mvp
+package ru.aslazarev.mvp.view.activity
 
 import android.os.Bundle
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
+import ru.aslazarev.mvp.App
+import ru.aslazarev.mvp.R
 import ru.aslazarev.mvp.databinding.ActivityMainBinding
-import ru.aslazarev.mvp.view.BackButtonListener
-import ru.terrakok.cicerone.android.pure.AppNavigator
+import ru.aslazarev.mvp.navigation.BackButtonListener
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
 
 class MainActivity : MvpAppCompatActivity(), MainView {

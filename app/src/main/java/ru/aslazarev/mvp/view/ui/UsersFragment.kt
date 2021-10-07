@@ -8,10 +8,11 @@ import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.aslazarev.mvp.App
 import ru.aslazarev.mvp.databinding.FragmentUsersBinding
-import ru.aslazarev.mvp.model.GitHubUser
 import ru.aslazarev.mvp.model.GitHubUsersRepo
 import ru.aslazarev.mvp.presentation.UsersPresenter
-import ru.aslazarev.mvp.view.BackButtonListener
+import ru.aslazarev.mvp.navigation.BackButtonListener
+import ru.aslazarev.mvp.view.images.GlideImageLoader
+import ru.aslazarev.mvp.view.ui.adapter.UsersRVAdapter
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     companion object {
@@ -35,7 +36,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     override fun init() {
         binding?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRVAdapter(presenter.usersListPresenter)
+        adapter = UsersRVAdapter(presenter.usersListPresenter, GlideImageLoader())
         binding?.rvUsers?.adapter = adapter
     }
 

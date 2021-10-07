@@ -4,25 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
-
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="horizontal"
     android:foreground="?attr/selectableItemBackground"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:weightSum="3">
 
-    <ImageView
-        android:id="@+id/iv_avatar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <TextView
+        android:id="@+id/repo_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center"
+        android:layout_weight="2"
         android:layout_margin="16dp"/>
 
 
     <TextView
-        android:id="@+id/tv_login"
+        android:id="@+id/fork_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end|center"
+        android:layout_weight="1"
         android:layout_marginStart="16dp"/>
 </LinearLayout>
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
