@@ -1,5 +1,8 @@
 package ru.aslazarev.mvp.model
 
+import io.reactivex.rxjava3.annotations.NonNull
+import io.reactivex.rxjava3.core.Observable
+
 class GitHubUsersRepo {
     private val repositories = listOf(
 
@@ -10,7 +13,7 @@ class GitHubUsersRepo {
         GitHubUser("login5")
     )
 
-    fun getUsers(): List<GitHubUser> {
-        return repositories
+    fun getUserObserver(): @NonNull Observable<GitHubUser> {
+        return Observable.fromIterable(repositories)
     }
 }
