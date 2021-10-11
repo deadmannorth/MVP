@@ -2,11 +2,8 @@ package ru.aslazarev.mvp.view.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import ru.aslazarev.mvp.R
 import ru.aslazarev.mvp.databinding.ItemRepoBinding
-import ru.aslazarev.mvp.model.GitHubUser
 import ru.aslazarev.mvp.presentation.IRepoListPresenter
 
 class ReposRVAdapter(val presenter: IRepoListPresenter): RecyclerView.Adapter<ReposRVAdapter.ViewHolder>() {
