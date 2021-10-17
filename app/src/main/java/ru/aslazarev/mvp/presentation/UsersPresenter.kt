@@ -10,8 +10,14 @@ import ru.aslazarev.mvp.navigation.AndroidScreens
 import ru.aslazarev.mvp.view.ui.adapter.UserItemView
 import ru.aslazarev.mvp.view.ui.UsersView
 import ru.terrakok.cicerone.Router
+import javax.inject.Inject
 
-class UsersPresenter(val usersRepo: GitHubUsersRepo, val router: Router) : MvpPresenter<UsersView>() {
+class UsersPresenter: MvpPresenter<UsersView>() {
+    @Inject
+    lateinit var usersRepo: GitHubUsersRepo
+    @Inject
+    lateinit var router: Router
+
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GitHubUser>()
 
@@ -41,7 +47,7 @@ class UsersPresenter(val usersRepo: GitHubUsersRepo, val router: Router) : MvpPr
     }
 
     fun loadData() {
-        usersRepo.getRepository()
+        usersRepo.getUsers()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ users ->
@@ -50,7 +56,6 @@ class UsersPresenter(val usersRepo: GitHubUsersRepo, val router: Router) : MvpPr
             }, {Log.e("UsersPresenter", "Ошибка получения пользователей", it)
             })
     }
-
 
     fun backPressed(): Boolean {
         router.exit()

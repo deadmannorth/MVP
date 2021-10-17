@@ -22,10 +22,11 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
         fun newInstance() = UsersFragment()
     }
 
-    val presenter: UsersPresenter by moxyPresenter { UsersPresenter(GitHubUsersRepo(
-        AndroidNetworkStatus(requireContext()),
-        RoomGithubUsersCache(Database.getInstance())
-    ), App.instance.router) }
+    val presenter: UsersPresenter by moxyPresenter {
+        UsersPresenter().apply {
+            App.instance.appComponent.inject(this)
+        }
+    }
     var adapter: UsersRVAdapter? = null
 
     private var binding: FragmentUsersBinding? = null

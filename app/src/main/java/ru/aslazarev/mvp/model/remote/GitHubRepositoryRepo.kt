@@ -7,19 +7,21 @@ import ru.aslazarev.mvp.model.db.Database
 import ru.aslazarev.mvp.model.db.RoomGithubRepositoriesCache
 import ru.aslazarev.mvp.remote.ApiHolder
 import ru.aslazarev.mvp.utils.INetworkStatus
+import javax.inject.Inject
 
-class GitHubRepositoryRepo(
+class GitHubRepositoryRepo @Inject constructor(
     private val networkStatus: INetworkStatus,
-    private val database: Database,
-    private val user: GitHubUser,
-    private val cache: RoomGithubRepositoriesCache = RoomGithubRepositoriesCache(database, user)
-): IGitHubUsersRepo<List<GitHubUserRepos>> {
+    private val cache: RoomGithubRepositoriesCache,
+    private val apiHolder: ApiHolder,
+)
+{
 
-    override fun getRepository() = networkStatus.isOnlineSingle().flatMap { isOnline ->
+    fun getRepository(user: GitHubUser) = networkStatus.isOnlineSingle().flatMap { isOnline ->
         if (isOnline) {
-            ApiHolder.api.getUserRepo(user.login.orEmpty()).flatMap { repositories ->
+            apiHolder.api.getUserRepo(user.login.orEmpty()).flatMap { repositories ->
                 Single.fromCallable {
                     Thread{
+                        cache.user = user
                         cache.setCache(repositories)
                     }.start()
                     repositories
