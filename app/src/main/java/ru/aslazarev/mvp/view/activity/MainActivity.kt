@@ -7,18 +7,25 @@ import ru.aslazarev.mvp.App
 import ru.aslazarev.mvp.R
 import ru.aslazarev.mvp.databinding.ActivityMainBinding
 import ru.aslazarev.mvp.navigation.BackButtonListener
+import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
+import javax.inject.Inject
 
 class MainActivity : MvpAppCompatActivity(), MainView {
     private lateinit var binding: ActivityMainBinding
-    private val presenter by moxyPresenter { MainPresenter(App.instance.router) }
+    private val presenter by moxyPresenter {
+        App.instance.appComponent.presenter()
+    }
     private val navigator = SupportAppNavigator(this, R.id.container)
+    @Inject
+    lateinit var navigatorHolder: NavigatorHolder
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+        App.instance.appComponent.inject(this)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -26,12 +33,12 @@ class MainActivity : MvpAppCompatActivity(), MainView {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        App.instance.navigatorHolder.setNavigator(navigator)
+        navigatorHolder.setNavigator(navigator)
     }
 
     override fun onPause() {
         super.onPause()
-        App.instance.navigatorHolder.removeNavigator()
+        navigatorHolder.removeNavigator()
     }
 
     override fun onBackPressed() {
